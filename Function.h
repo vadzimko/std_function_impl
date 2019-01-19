@@ -112,7 +112,9 @@ Function<R(Args...)>::operator bool() const noexcept {
 
 template <class R, class ...Args>
 Function<R(Args...)>::~Function() {
-    delete f;
+    if (!is_small) {
+        delete f;
+    }
 }
 
 template<class R, class... Args>
