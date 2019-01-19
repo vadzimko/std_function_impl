@@ -7,7 +7,7 @@
 
 template <class R, class ...Args>
 struct callable_base {
-    virtual R operator()(Args... args) const = 0;
+    virtual R operator()(Args... args)  = 0;
     virtual ~callable_base() = default;
     virtual callable_base *clone() const = 0;
 };
@@ -15,7 +15,7 @@ struct callable_base {
 template <class F, class R, class ...Args>
 struct callable : callable_base<R, Args...> {
     explicit callable(F const& functor) : functor(functor) {}
-    R operator()(Args... args) const { return functor(args...); }
+    R operator()(Args... args)  { return functor(args...); }
     callable *clone() const { return new callable(functor); }
 
 private:
@@ -75,7 +75,7 @@ R Function<R(Args...)>::operator()(Args... args) const {
     assert(*this);
 
     if (is_small) {
-        return (*static_cast<callable_base<R, Args...> const *>(static_cast<void const*>((buffer))))(args...);
+        return (*(callable_base<R, Args...> *)(buffer))(args ...);
     } else {
         return (*f)(args...);
     }
