@@ -11,14 +11,14 @@ template <class R, class ...Args>
 struct callable_base {
     virtual R operator()(Args... args)  = 0;
     virtual ~callable_base() = default;
-    virtual callable_base *clone() const = 0;
+    virtual callable_base *clone()  = 0;
 };
 
 template <class F, class R, class ...Args>
 struct callable : callable_base<R, Args...> {
-    explicit callable(F const& functor) : functor(functor) {}
-    R operator()(Args... args)  { return functor(args...); }
-    callable *clone() const { return new callable(functor); }
+    explicit callable(F& functor) : functor(std::move(functor)) {}
+    R operator()(Args... args)  { return functor(std::forward<Args>(args)...); }
+    callable *clone() { return new callable(functor); }
 
 private:
     F functor;
