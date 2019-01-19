@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <iostream>
 #include <array>
+#include <cassert>
+#include <cstring>
 
 template <class R, class ...Args>
 struct callable_base {
