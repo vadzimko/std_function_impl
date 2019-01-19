@@ -45,7 +45,7 @@ struct Function<R(Args...)> {
     Function(Function&& other) noexcept;
 
     template<typename F>
-    Function(F const& func);
+    Function(F func);
 
     ~Function();
 
@@ -83,7 +83,7 @@ R Function<R(Args...)>::operator()(Args... args) const {
 
 template <class R, class ...Args>
 template <class F>
-Function<R(Args...)>::Function(F const& func) {
+Function<R(Args...)>::Function(F func) {
     if (sizeof(func) < BUF_MAX_SIZE) {
         new (buffer) callable<typename func_type_getter<F>::type, R, Args...>(func);
         is_small = true;
@@ -98,9 +98,9 @@ Function <R(Args...)>::Function(Function const& rhs) {
     if (rhs) {
         is_small = rhs.is_small;
         if (rhs.is_small) {
-            f = rhs.f->clone();
-        } else {
             memcpy(buffer, rhs.buffer, BUF_MAX_SIZE);
+        } else {
+            f = rhs.f->clone();
         }
     }
 }

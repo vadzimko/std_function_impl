@@ -13,13 +13,13 @@ string many_a(int a) {
 }
 
 void test_function() {
-    Function<string(int)> function(&many_a);
+    Function<string(int)> function(many_a);
 
     assert(function(3) == "aaa");
 }
 
 void test_function_assignment() {
-    Function<string(int)> function = &many_a;
+    Function<string(int)> function = many_a;
 
     assert(function(4) == "aaaa");
 }
